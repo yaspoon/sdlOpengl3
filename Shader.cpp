@@ -1,5 +1,54 @@
 #include "Shader.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+
+/*********************************
+Shader::readTextFile
+
+Copied from my assignment
+Reads in a text file to use as
+a shader source file
+*********************************/
+std::string* Shader::readTextFile(const char* filename)
+{
+    char* readText = NULL;
+    std::string* readString = NULL;
+
+    if(filename != NULL)
+    {
+        FILE* textFile = fopen(filename, "r");
+
+        if( textFile != NULL)
+        {
+            fseek(textFile, 0, SEEK_END);
+            int count = ftell(textFile);
+            rewind(textFile);
+
+            if(count > 0)
+            {
+                readText = (char*)malloc(sizeof(char) * (count + 1));
+                count = fread(readText, sizeof(char), count, textFile);
+                readText[count] = '\0'; //set last character to null terminator
+                readString = new std::string(readText);
+                delete[] readText;
+            }
+
+            fclose(textFile);
+
+        }
+        else
+        {
+            printf("Shader.readTextFile:Failed to open %s\n", filename);
+        }
+    }
+    else
+    {
+        printf("Shader.readTextFile filename passed was null\n");
+    }
+
+    return readString;
+}
 
 //Takes in a type of shader and the shader string
 //then compiles and checks for errors

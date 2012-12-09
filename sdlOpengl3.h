@@ -1,18 +1,44 @@
-#include <SDL2/SDL.h>
+#ifndef SDL_OPENGL3_H
+#define SDL_OPENGL3_H
 
-class mainEngine
+#include <SDL2/SDL.h>
+#include "Shader.h"
+#include "timer.h"
+
+class Engine
 {
     private:
         SDL_Window* mainWindow;
         SDL_GLContext mainContext;
+        GLuint glProgram;
+        GLuint positionBufferObject;
+        GLuint vao;         //vertex array object
+        Timer fpsTimer;
+
+        bool quit;
 
     public:
 
-    mainEngine(){};
+    Engine();
 
-    SDL_Window* initSDL();
+    void mainEngine();
 
-    SDL_GLContext initGL( SDL_Window* mainWindow);
+    void initialise( int argc, char** argv);
 
-    bool exitProgram(SDL_Window* window, SDL_GLContext* context);
+    void initVertexBuffers();
+
+    void initShaders();
+
+    bool initSDL();
+
+    bool initGL();
+
+    void handleEvents();
+
+    void handleResize(int width, int height);
+
+    void drawFrame();
+
+    bool exitProgram();
 };
+#endif
